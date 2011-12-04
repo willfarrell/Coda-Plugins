@@ -31,6 +31,8 @@
 			<false/>
 			<key>name</key>
 			<string>Remove Useless Files</string>
+			<key>output</key>
+			<string>discard</string>
 			<key>script</key>
 			<string>remove.sh</string>
 			<key>uuid</key>
