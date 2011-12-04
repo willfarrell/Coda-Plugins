@@ -8,7 +8,7 @@ Remove Useless Files
 - Removes core.0000 files
 - Removes _notes folders
 
-Clean PHP
+PHP Code Sniffer Clean
 - Auto fix common Code Sniffer errors and warnings
 - auto trim trailing whitespace
 
