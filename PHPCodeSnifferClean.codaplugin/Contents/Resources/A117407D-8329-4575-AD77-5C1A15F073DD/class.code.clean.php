@@ -39,6 +39,7 @@ class Code_Sniffer_Clean
 	var $version = "0.0.1";
 	var $extensions = array('php', 'inc');
 	var $debug = false;
+	var $not_nl_regex = " \t";
 	
 	/**
 	 * Constructor
@@ -73,19 +74,19 @@ class Code_Sniffer_Clean
 		/*
 		 * clean code
 		 */
-		$data = preg_replace("/[\r]/", "", $data);
+		$data = preg_replace("/\r\n/", "\n", $data);
 		
 		/*
 		 * replace all "<?" with <?php
 		 * ERROR: Short PHP opening tag used; expected "<?php" but found "<?"
 		 */
-		$data = preg_replace("/([\t ]*)<\?([^\S]+)/i", "$1<?php$2", $data);
+		$data = preg_replace("/([".$this->not_nl_regex."]*)<\?([^\S]+)/i", "$1<?php$2", $data);
 		
 		/*
 		 * replace all <\?= with <?php echo
 		 * ERROR: Short PHP opening tag used with echo; expected "<?php echo ..." but found "<?= ..."
 		 */
-		$data = preg_replace("/([\t ]*)<\?=[\s]*(.*?)[\s]*\?>/i", "$1<?php echo $2 ?>", $data);
+		$data = preg_replace("/([{$this->not_nl_regex}]*)<\?=[\s]*(.*?)[\s]*\?>/i", "$1<?php echo $2 ?>", $data);
 		
 		/*
 		 * fix all code includes with proper format and change to require_once
@@ -123,14 +124,14 @@ class Code_Sniffer_Clean
 		 * fix all class statements with proper formatting
 		 * ERROR: Opening brace of a class must be on the line after the definition
 		 */
-		$regex = "/([\t ]*)class[\s]*([\w\s]*?)[\s]*{/i";
+		$regex = "/([{$this->not_nl_regex}]*)class[\s]*([\w\s]*?)[\s]*{/i";
 		$replace = "$1class $2\n$1{";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
 		 * fix all function statements with proper formatting
 		 */
-		$regex = "/([\t ]*)(|public |public static |private |private static )function[\s]*([\w]*)[\s]*\((.*)\)[\s]*{/i";
+		$regex = "/([{$this->not_nl_regex}]*)(|public |public static |private |private static )function[\s]*([\w]*)[\s]*\((.*)\)[\s]*{/i";
 		$replace = "$1$2function $3($4)\n$1{";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
@@ -156,7 +157,7 @@ class Code_Sniffer_Clean
 			'see' => 'see       ',
 			'since' => 'since     ',
 		);
-		$regex = "/\*[\t ]*@(category|package|author|copyright|license|version|link)[\s]*([^\n]*)/ie";
+		$regex = "/\*[{$this->not_nl_regex}]*@(category|package|author|copyright|license|version|link)[\s]*([^\n]*)/ie";
 		$replace = "'* @'.\$tags['\\1'].'\\2'";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
@@ -198,14 +199,14 @@ class Code_Sniffer_Clean
 		 * fix @param
 		 * ERROR: Last parameter comment requires a blank newline after it
 		 */
-		$regex = "/\*[\t ]*@param([^\n]*)\n([\t ]*)\*[\t ]*@return/";
+		$regex = "/\*[{$this->not_nl_regex}]*@param([^\n]*)\n([{$this->not_nl_regex}]*)\*[\t ]*@return/";
 		$replace = "* @param$1\n$2* \n$2* @return";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
 		 * clean up @return, @access, etc
 		 */
-		$regex = "/\*[\t ]*@(return|throws|access|see|since|deprecated)[\s]*([^\n]*)/";
+		$regex = "/\*[{$this->not_nl_regex}]*@(return|throws|access|see|since|deprecated)[\s]*([^\n]*)/";
 		$replace = "* @$1 $2";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
@@ -219,7 +220,7 @@ class Code_Sniffer_Clean
 		/*
 		 * remove trailing spaces
 		 */
-		//$data = preg_replace("/[\t ]+$/", "", $data);
+		$data = preg_replace("/[{$this->not_nl_regex}]+\n/", "\n", $data);
 		
 		return $data;
 	}
