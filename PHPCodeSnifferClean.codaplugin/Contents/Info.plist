@@ -29,6 +29,8 @@
 			<string>none</string>
 			<key>input</key>
 			<string>document</string>
+			<key>keyEquivalentConflict</key>
+			<false/>
 			<key>name</key>
 			<string>Code Sniffer Clean</string>
 			<key>output</key>

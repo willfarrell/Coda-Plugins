@@ -215,7 +215,7 @@ class Code_Sniffer_Clean
 		 * replace all tabs with 4 spaces
 		 * ERROR: Line indented incorrectly;
 		 */
-		//$data = preg_replace("/[\t]+/", "    ", $data);
+		$data = preg_replace("/\t/", "    ", $data);
 		
 		/*
 		 * remove trailing spaces
