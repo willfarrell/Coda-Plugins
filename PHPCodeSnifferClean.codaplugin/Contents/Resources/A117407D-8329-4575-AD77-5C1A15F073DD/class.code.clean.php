@@ -19,9 +19,11 @@
 To Do
 -Add smart file/class spacing like function
 -move function only spacing into smart spacing loop.
+- nested fct(  ubfct(  ) ), not removing spaces properly
+- move @access to after @return
 */
 
-$root_folder = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+//$root_folder = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 
 /**
  * Code_Sniffer_Clean
@@ -100,15 +102,17 @@ class Code_Sniffer_Clean
 		 * fix all if, for, foreach, while, switch statements with proper formatting
 		 * ERROR: Expected "if (...) {\n"; found "if(...){\n"
 		 */
-		$regex = "/(if|for|foreach|while|switch)[\s]*\((.*)\)[\s]*{/i";
+		$regex = "/(if|for|foreach|while|switch)[\s]*\([\s]*(.*?)[\s]*\)[\s]*{/i";
 		$replace = "$1 ($2) {";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
 		 * fix all elseif statements with proper formatting
 		 * ERROR: Expected "} else if (...) {\n"; found "}else if(...){\n"
+		 * ERROR: Space after opening parenthesis of function call prohibited
+		 * ERROR: Space before closing parenthesis of function call prohibited
 		 */
-		$regex = "/}[\s]*(else if|elseif)[\s]*\((.*)\)[\s]*{/i";
+		$regex = "/}[\s]*(else if|elseif)[\s]*\([\s]*(.*?)[\s]*\)[\s]*{/i";
 		$replace = "} $1 ($2) {";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
@@ -131,8 +135,17 @@ class Code_Sniffer_Clean
 		/*
 		 * fix all function statements with proper formatting
 		 */
-		$regex = "/([{$this->not_nl_regex}]*)(|public |public static |private |private static )function[\s]*([\w]*)[\s]*\((.*)\)[\s]*{/i";
+		$regex = "/([{$this->not_nl_regex}]*)(|public |public static |private |private static )function[\s]*([\w]*)[\s]*\([\s]*(.*?)[\s]*\)[\s]*{/i";
 		$replace = "$1$2function $3($4)\n$1{";
+		$data = preg_replace($regex, $replace,$data, -1, $count);
+		
+		/*
+		 * remove space after ( and before ) on function calls
+		 * ERROR: Space after opening parenthesis of function call prohibited
+		 * ERROR: Space before closing parenthesis of function call prohibited
+		 */
+		$regex = "/([\w]+)\([\s]*(.*?)[\s]*\)([\s;\)\,\.])/i";
+		$replace = "$1($2)$3";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
