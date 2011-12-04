@@ -10,8 +10,5 @@
 * Auto fix common Code Sniffer errors and warnings
 * auto trim trailing whitespace
 
-## Other Great Plugins ##
-PHP Docblock Generator - http://justinhileman.info/docblock-generator-plugin-for-coda/
-
 ## Plugin Unistall ##
 /Users/YourUserName/Library/Application Support/Coda/Plug-ins/ 

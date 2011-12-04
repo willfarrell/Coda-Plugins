@@ -21,6 +21,7 @@ To Do
 -move function only spacing into smart spacing loop.
 - nested fct(  ubfct(  ) ), not removing spaces properly
 - move @access to after @return
+-- order funtion tags
 */
 
 //$root_folder = dirname(__FILE__) . DIRECTORY_SEPARATOR;
@@ -206,6 +207,20 @@ class Code_Sniffer_Clean
 				$comment_update = str_replace($params[0][$i], "* @param $type $var ".$params[3][$i], $comment_update);
 			}
 			$data = str_replace($comment, $comment_update, $data);
+		}
+		
+		/*
+		 * @param move params after comment
+		 * ERROR: Parameters must appear immediately after the comment
+		 */
+		$regex = "/"
+				."([{$this->not_nl_regex}]*)\* @(return|throws|access|see|since|deprecated)([^\n]*)\n"
+				."([{$this->not_nl_regex}]*)\* @(param)([^\n]*)\n/";
+		$replace = "$4* @$5$6\n$1* @$2$3\n";
+		$old_data = '';
+		while($data != $old_data) {
+			$old_data = $data;
+			//$data = preg_replace($regex, $replace,$data, -1, $count);
 		}
 		
 		/*
