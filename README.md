@@ -1,6 +1,6 @@
 # Plugins
 
-## Remove Useless Files# #
+## Remove Useless Files ##
 * Removes .DS_Store files
 * Removes error_log files
 * Removes core.0000 files
@@ -13,5 +13,5 @@
 ## Other Great Plugins ##
 PHP Docblock Generator - http://justinhileman.info/docblock-generator-plugin-for-coda/
 
-## Plugin Unistall See ##
+## Plugin Unistall ##
 /Users/YourUserName/Library/Application Support/Coda/Plug-ins/ 
