@@ -185,6 +185,7 @@ class Code_Sniffer_Clean
 		 * fix @param
 		 * param has certain formating that cannot be done in a single regex
 		 * ERROR: The variable names for parameters - (1) and - (2) do not align
+		 * ERROR: Missing comment for param "$arg" at position 1
 		 */
 		preg_match_all("/\/\*\*([\s\S]*?)\*\//", $data, $matches);
 		
