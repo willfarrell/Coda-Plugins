@@ -16,11 +16,14 @@
  */
 
 /*
-To Do
--Add smart file/class spacing like function
--move function only spacing into smart spacing loop.
-- nested fct(  ubfct(  ) ), not removing spaces properly
+To Do:
+- Add smart file/class spacing like function
+- move function only spacing into smart spacing loop.
+- define(*****, _____) **** to all caps
 
+Bugs:
+- nested fct(  ubfct(  ) ), not removing spaces properly
+- if (!function _exists('get_called_class')) { moves { to next line
 */
 
 //$root_folder = dirname(__FILE__) . DIRECTORY_SEPARATOR;
@@ -76,7 +79,7 @@ class Code_Sniffer_Clean
 		/*
 		 * clean code
 		 */
-		$data = preg_replace("/\r\n/", "\n", $data);
+		$data = preg_replace("/\r/", "", $data);
 		
 		/*
 		 * replace all "<?" with <?php
