@@ -176,6 +176,13 @@ class Code_Sniffer_Clean
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
+		 * clean up @return, @access, etc
+		 */
+		$regex = "/\*[{$this->not_nl_regex}]*@(return|throws|access|see|since|deprecated|param)[\s]*([^\n]*)/";
+		$replace = "* @$1 $2";
+		$data = preg_replace($regex, $replace,$data, -1, $count);
+		
+		/*
 		 * fix @param
 		 * param has certain formating that cannot be done in a single regex
 		 * ERROR: The variable names for parameters - (1) and - (2) do not align
@@ -186,7 +193,7 @@ class Code_Sniffer_Clean
 			$comment_update = $comment;
 			$length = 0;
 			preg_match_all(
-				"/\*[\t ]*@param[\s]*([a-z]*)[\s]*(\\$[\w]*)[\s]*([^\n]*)/i",
+				"/\* @param[{$this->not_nl_regex}]*([a-z]*)[{$this->not_nl_regex}]*(\\$[\w]*)[{$this->not_nl_regex}]*([^\n]*)/i",
 				$comment,
 				$params
 			);
@@ -209,34 +216,43 @@ class Code_Sniffer_Clean
 			$data = str_replace($comment, $comment_update, $data);
 		}
 		
+		
+		
 		/*
-		 * @param move params after comment
+		 * order function tags by standards
 		 * ERROR: Parameters must appear immediately after the comment
 		 */
+		
+		$tags_top = array('param');
+		$tags_bottom = array('return', 'throws', 'access', 'static', 'see', 'since', 'deprecated');
 		$regex = "/"
 				."([{$this->not_nl_regex}]*)\* @(return|throws|access|see|since|deprecated)([^\n]*)\n"
-				."([{$this->not_nl_regex}]*)\* @(param)([^\n]*)\n/";
-		$replace = "$4* @$5$6\n$1* @$2$3\n";
-		$old_data = '';
-		while($data != $old_data) {
-			$old_data = $data;
-			//$data = preg_replace($regex, $replace,$data, -1, $count);
+				."([{$this->not_nl_regex}]*)\* @(param)([^\n]*)/";
+		$replace = "$4* @$5$6\n$1* @$2$3";
+		
+		$tag_count = count($tags);
+		while (count($tags_bottom)) {
+			$regex = "/"
+					."([{$this->not_nl_regex}]*)\* @(".implode('|', $tags_bottom).")([^\n]*)\n"
+					."([{$this->not_nl_regex}]*)\* @(".implode('|', $tags_top).")([^\n]*)/";
+			// continue till all tags have moved down
+			$old_data = '';
+			while($data != $old_data) {
+				$old_data = $data;
+				$data = preg_replace($regex, $replace, $data, -1, $count);
+			}
+			$tags_top[] = array_shift($tags_bottom);
 		}
 		
 		/*
 		 * fix @param
 		 * ERROR: Last parameter comment requires a blank newline after it
 		 */
-		$regex = "/\*[{$this->not_nl_regex}]*@param([^\n]*)\n([{$this->not_nl_regex}]*)\*[\t ]*@return/";
+		$regex = "/\* @param([^\n]*)\n([{$this->not_nl_regex}]*)\* @return/";
 		$replace = "* @param$1\n$2* \n$2* @return";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
-		/*
-		 * clean up @return, @access, etc
-		 */
-		$regex = "/\*[{$this->not_nl_regex}]*@(return|throws|access|see|since|deprecated)[\s]*([^\n]*)/";
-		$replace = "* @$1 $2";
-		$data = preg_replace($regex, $replace,$data, -1, $count);
+		
 		
 		//-- Spacing --//
 		/*
