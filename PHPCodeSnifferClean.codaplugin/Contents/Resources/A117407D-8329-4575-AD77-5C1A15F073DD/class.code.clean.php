@@ -20,8 +20,7 @@ To Do
 -Add smart file/class spacing like function
 -move function only spacing into smart spacing loop.
 - nested fct(  ubfct(  ) ), not removing spaces properly
-- move @access to after @return
--- order funtion tags
+
 */
 
 //$root_folder = dirname(__FILE__) . DIRECTORY_SEPARATOR;
@@ -210,13 +209,19 @@ class Code_Sniffer_Clean
 			for($i=0; $i<$param_size; $i++) {
 				$type = str_pad($params[1][$i], $type_size);
 				$var = str_pad($params[2][$i], $var_size);
-				//echo "* @param $type $var ".$params[3][$i]."\n";
-				$comment_update = str_replace($params[0][$i], "* @param $type $var ".$params[3][$i], $comment_update);
+				$tag_comment = ($params[3][$i]) ? $params[3][$i] : "__comment_missing__";
+				$comment_update = str_replace($params[0][$i], "* @param $type $var ".$tag_comment, $comment_update);
 			}
 			$data = str_replace($comment, $comment_update, $data);
 		}
 		
 		
+		/*
+		 * remove blank line after tag, for ordering
+		 */
+		$regex = "/\* @(param|return|throws|access|see|since|deprecated)([^\n]*)\n([{$this->not_nl_regex}]*)\*([{$this->not_nl_regex}]*)\n/";
+		$replace = "* @$1$2\n";
+		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
 		 * order function tags by standards
@@ -248,8 +253,8 @@ class Code_Sniffer_Clean
 		 * fix @param
 		 * ERROR: Last parameter comment requires a blank newline after it
 		 */
-		$regex = "/\* @param([^\n]*)\n([{$this->not_nl_regex}]*)\* @return/";
-		$replace = "* @param$1\n$2* \n$2* @return";
+		$regex = "/\* @param([^\n]*)\n([{$this->not_nl_regex}]*)\* @(return|throws|access|see|since|deprecated)/";
+		$replace = "* @param$1\n$2* \n$2* @$3";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		
