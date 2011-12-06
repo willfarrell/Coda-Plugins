@@ -20,10 +20,8 @@ To Do:
 - Add smart file/class spacing like function
 - move function only spacing into smart spacing loop.
 - define(*****, _____) **** to all caps
+- <?php } ?> 
 
-Bugs:
-- nested fct(  ubfct(  ) ), not removing spaces properly
-- if (!function _exists('get_called_class')) { moves { to next line
 */
 
 //$root_folder = dirname(__FILE__) . DIRECTORY_SEPARATOR;
@@ -94,6 +92,12 @@ class Code_Sniffer_Clean
 		$data = preg_replace("/([{$this->not_nl_regex}]*)<\?=[\s]*(.*?)[\s]*\?>/i", "$1<?php echo $2 ?>", $data);
 		
 		/*
+		 * replace all <?php } ?>
+		 * ERROR | Closing brace must be on a line by itself
+		 */
+		$data = preg_replace("/([{$this->not_nl_regex}]*)<\?php[\s]*}[\s]*\?>/i", "$1<?php\n$1}\n$1?>", $data);
+		
+		/*
 		 * fix all code includes with proper format and change to require_once
 		 * ERROR: "include" is a statement not a function; no parentheses are required
 		 */
@@ -105,8 +109,8 @@ class Code_Sniffer_Clean
 		 * fix all if, for, foreach, while, switch statements with proper formatting
 		 * ERROR: Expected "if (...) {\n"; found "if(...){\n"
 		 */
-		$regex = "/(if|for|foreach|while|switch)[\s]*\([\s]*(.*?)[\s]*\)[\s]*{/i";
-		$replace = "$1 ($2) {";
+		$regex = "/(if|for|foreach|while|switch)[\s]*\([\s]*(.*?)[\s]*\)[\s]*([^\(\)])/i";
+		$replace = "$1 ($2) $3";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
@@ -115,8 +119,8 @@ class Code_Sniffer_Clean
 		 * ERROR: Space after opening parenthesis of function call prohibited
 		 * ERROR: Space before closing parenthesis of function call prohibited
 		 */
-		$regex = "/}[\s]*(else if|elseif)[\s]*\([\s]*(.*?)[\s]*\)[\s]*{/i";
-		$replace = "} $1 ($2) {";
+		$regex = "/}[\s]*(else if|elseif)[\s]*\([\s]*(.*?)[\s]*\)[\s]*([^\(\)])/i";
+		$replace = "} $1 ($2) $3";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
@@ -138,8 +142,8 @@ class Code_Sniffer_Clean
 		/*
 		 * fix all function statements with proper formatting
 		 */
-		$regex = "/([{$this->not_nl_regex}]*)(|public |public static |private |private static )function[{$this->not_nl_regex}]+([\w]*)[\s]*\([\s]*(.*?)[\s]*\)[\s]*{/i";
-		$replace = "$1$2function $3($4)\n$1{";
+		$regex = "/([{$this->not_nl_regex}]*)(|public |public static |private |private static )function[{$this->not_nl_regex}]+([\w]*)[\s]*\([\s]*(.*?)[\s]*\)[\s]*([^\(\)])/i";
+		$replace = "$1$2function $3($4)\n$1$5";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
@@ -147,8 +151,11 @@ class Code_Sniffer_Clean
 		 * ERROR: Space after opening parenthesis of function call prohibited
 		 * ERROR: Space before closing parenthesis of function call prohibited
 		 */
-		$regex = "/([\w]+)\([\s]*(.*?)[\s]*\)([\s;\)\,\.])/i";
-		$replace = "$1($2)$3";
+		$regex = "/([\w]+)\([\s]*(.*)[\s]+\)/i";
+		$replace = "$1($2)";
+		$data = preg_replace($regex, $replace,$data, -1, $count);
+		$regex = "/([\w]+)\([\s]+(.*)[\s]*\)/i";
+		$replace = "$1($2)";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
 		/*
