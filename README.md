@@ -11,4 +11,8 @@
 * auto trim trailing whitespace
 
 ## Plugin Unistall ##
-/Users/YourUserName/Library/Application Support/Coda/Plug-ins/ 
+/Users/YourUserName/Library/Application Support/Coda/Plug-ins/
+
+## Other suggested Plugins ##
+Tabster: http://code.google.com/p/tabsterforcoda/downloads/list
+Allows tab, tab+shift for indenting
