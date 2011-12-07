@@ -10,6 +10,9 @@
 * Auto fix common Code Sniffer errors and warnings
 * auto trim trailing whitespace
 
+## Pear PHP ##
+* Modified version altered to work with MAMP 2.0.5 default setup
+
 ## Plugin Unistall ##
 /Users/YourUserName/Library/Application Support/Coda/Plug-ins/
 
