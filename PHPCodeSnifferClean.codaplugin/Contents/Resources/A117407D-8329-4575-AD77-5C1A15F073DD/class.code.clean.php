@@ -89,7 +89,7 @@ class Code_Sniffer_Clean
 		 * replace all <\?= with <?php echo
 		 * ERROR: Short PHP opening tag used with echo; expected "<?php echo ..." but found "<?= ..."
 		 */
-		$data = preg_replace("/([{$this->not_nl_regex}]*)<\?=[\s]*(.*?)[\s]*\?>/i", "$1<?php echo $2 ?>", $data);
+		$data = preg_replace("/([{$this->not_nl_regex}]*)<\?=[\s]*(.*?)[;]?[\s]*\?>/i", "$1<?php echo $2; ?>", $data);
 		
 		/*
 		 * replace all <?php } ?>
