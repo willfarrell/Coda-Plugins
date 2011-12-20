@@ -103,10 +103,10 @@ class Code_Sniffer_Clean
 		 * fix all code includes with proper format and change to require_once
 		 * ERROR: "include_once ' is a statement not a function'; no parentheses are required
 		 */
-		$regex = "/(require|include)[\s]*[\(]?['\"]?([^'\"]*)['\"]?[\)]?;/i";
+		$regex = "/(require|include)[\s]*[\(]?['\"]?(.*)['\"]?[\)]?;/i";
 		$replace = "$1_once '$2';";
 		$data = preg_replace($regex, $replace, $data, -1, $count);
-		$regex = "/(require_once|include_once)[\s]*[\(]?['\"]?([^'\"]*)['\"]?[\)]?;/i";
+		$regex = "/(require_once|include_once)[\s]*[\(]?['\"]?(.*)['\"]?[\)]?;/i";
 		$replace = "$1 '$2';";
 		$data = preg_replace($regex, $replace, $data, -1, $count);
 
