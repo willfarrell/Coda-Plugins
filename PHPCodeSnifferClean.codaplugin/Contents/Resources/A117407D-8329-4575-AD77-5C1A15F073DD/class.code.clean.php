@@ -101,7 +101,10 @@ class Code_Sniffer_Clean
 		 * fix all code includes with proper format and change to require_once
 		 * ERROR: "include" is a statement not a function; no parentheses are required
 		 */
-		$regex = "/(require|require_once|include|include_once)[\s]*\(['\"]?([^'\"]*)['\"]?\);/i";
+		$regex = "/(require|include)[\s]*\(['\"]?([^'\"]*)['\"]?\);/i";
+		$replace = "$1_once '$2';";
+		$data = preg_replace($regex, $replace,$data, -1, $count);
+		$regex = "/(require_once|include_once)[\s]*\(['\"]?([^'\"]*)['\"]?\);/i";
 		$replace = "$1 '$2';";
 		$data = preg_replace($regex, $replace,$data, -1, $count);
 		
@@ -275,7 +278,7 @@ class Code_Sniffer_Clean
 		 * replace all tabs with 4 spaces
 		 * ERROR: Line indented incorrectly;
 		 */
-		$data = preg_replace("/\t/", "    ", $data);
+		//$data = preg_replace("/\t/", "    ", $data);
 		
 		/*
 		 * remove trailing spaces
