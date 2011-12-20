@@ -103,13 +103,14 @@ class Code_Sniffer_Clean
 		 * fix all code includes with proper format and change to require_once
 		 * ERROR: "include_once ' is a statement not a function'; no parentheses are required
 		 */
-		$regex = "/(require|include)[\s]*[\(]?['\"]?(.*)['\"]?[\)]?;/i";
-		$replace = "$1_once '$2';";
-		$data = preg_replace($regex, $replace, $data, -1, $count);
-		$regex = "/(require_once|include_once)[\s]*[\(]?['\"]?(.*)['\"]?[\)]?;/i";
+		$regex = "/(require_once|include_once|require|include)[\s]*[\(]?['\"]?(.*?)['\"]?[\)]?;/i";
 		$replace = "$1 '$2';";
 		$data = preg_replace($regex, $replace, $data, -1, $count);
-
+		
+		$regex = "/(require|include) [']?(.*?)[']?;/i";
+		$replace = "$1_once '$2';";
+		$data = preg_replace($regex, $replace, $data, -1, $count);
+		
 		/*
 		 * fix all if, for, foreach, while, switch statements with proper formatting
 		 * ERROR: Expected "if (...) {\n"; found "if (...) {\n"
@@ -156,7 +157,16 @@ class Code_Sniffer_Clean
 		$regex = "/([{$this->not_nl_regex}]*)(|public |public static |private |private static )function[{$this->not_nl_regex}]+([\w]*)[\s]*\([\s]*(.*?)[\s]*\)[\s]*([^\(\)])/i";
 		$replace = "$1$2function $3($4)\n$1$5";
 		$data = preg_replace($regex, $replace, $data, -1, $count);
-
+		
+		/*
+		 * add space after comma (,) in function calls
+		 * ERROR | No space found after comma in function call
+		 */
+		$regex = "/([^,\s]+)\,([^,\s]+)/i";
+		$replace = "$1, $2";
+		$data = preg_replace($regex, $replace, $data, -1, $count);
+		$data = preg_replace($regex, $replace, $data, -1, $count);
+		
 		/*
 		 * remove space after ( and before ) on function calls
 		 * ERROR: Space after opening parenthesis of function call prohibited
