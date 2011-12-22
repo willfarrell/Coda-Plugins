@@ -154,8 +154,8 @@ class Code_Sniffer_Clean
 		/*
 		 * fix all function statements with proper formatting
 		 */
-		$regex = "/([{$this->not_nl_regex}]*)(|public |public static |private |private static )function[{$this->not_nl_regex}]+([\w]*)[\s]*\([\s]*(.*?)[\s]*\)[\s]*([^\(\)])/i";
-		$replace = "$1$2function $3($4)\n$1$5";
+		$regex = "/([{$this->not_nl_regex}]*)(|public |public static |private |private static )function[{$this->not_nl_regex}]+([\w]*)[\s]*\([\s]*(.*)[\s]*\)[\s]*{/i";
+		$replace = "$1$2function $3($4)\n$1{";
 		$data = preg_replace($regex, $replace, $data, -1, $count);
 		
 		/*
