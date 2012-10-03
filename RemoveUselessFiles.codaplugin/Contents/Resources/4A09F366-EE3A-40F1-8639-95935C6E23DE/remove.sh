@@ -7,6 +7,7 @@ if [ "$CODA_SITE_LOCAL_PATH" != "" ]; then
     find . -name 'error_log' -exec rm -rf '{}' \;
     find . -regex '^core.[0-9]{4,}$' -exec rm -rf '{}' \;
 
+    // as per request
     find . -regex '^\._(.*)$' -exec rm -rf '{}' \;
 fi
 exit 0
