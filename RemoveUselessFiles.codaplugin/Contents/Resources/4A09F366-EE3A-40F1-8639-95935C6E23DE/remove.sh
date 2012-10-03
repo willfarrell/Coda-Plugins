@@ -6,5 +6,7 @@ if [ "$CODA_SITE_LOCAL_PATH" != "" ]; then
     find . -name '_notes' -exec rm -rf '{}' \;
     find . -name 'error_log' -exec rm -rf '{}' \;
     find . -regex '^core.[0-9]{4,}$' -exec rm -rf '{}' \;
+
+    find . -regex '^\._(.*)$' -exec rm -rf '{}' \;
 fi
 exit 0
