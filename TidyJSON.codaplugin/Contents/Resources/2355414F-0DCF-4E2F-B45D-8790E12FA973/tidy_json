@@ -1,0 +1,39 @@
+#!/usr/bin/python
+import sys
+import re
+
+indent=0
+out=''
+in_quote=False
+prev=False
+while 1:
+	next = sys.stdin.read(1)            # read a one-character string
+	if not next:                        # or an empty string at EOF
+		break
+	
+	if not prev == '\\' and not in_quote:
+		if re.match('\s', next) != None:
+				continue
+
+		if next == '{' or next == '[':
+			out = "%s\n%s%s" % (out, "\t" * indent, next)
+			indent+=1
+			out = "%s\n%s" % (out, "\t" * indent)
+			
+		elif next == '}' or next == ']':
+			indent-=1
+			out = "%s\n%s%s" % (out, "\t" * indent, next)
+		elif next == ',':
+			out = "%s,\n%s" % (out, "\t" * indent)
+		else:	
+			out = "%s%s" % (out, next)
+			
+	else:	
+		out = "%s%s" % (out, next)
+	
+	if prev != '\\' and next == '"':
+		in_quote=not in_quote
+		
+	prev=next
+print out.strip()
+
