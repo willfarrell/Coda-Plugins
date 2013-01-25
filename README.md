@@ -1,12 +1,14 @@
 # Plugins
 
 ## Remove Useless Files ##
-* Removes Thumbs.db files
-* Removes .DS_Store files
-* Removes ._whatever files
-* Removes error_log files
-* Removes core.0000 files
-* Removes _notes folders
+* Removes .DS_Store files (Mac OSX)
+* Removes error_log files (Apache/MAMP)
+* Removes _notes folders (Dreamweaver)
+* Removes ._whatever files (Mac OSX HTFS+)
+* Removes core.0000 files (Apache?)
+* Removes Thumbs.db files (Windows)
+
+* Note: Does not propagate through alias folders. Blocked via Mac OSX.
 
 ## PHP Code Sniffer Clean ##
 * Auto fix common Code Sniffer errors and warnings
@@ -18,6 +20,13 @@
 ## Plugin Unistall ##
 /Users/YourUserName/Library/Application Support/Coda/Plug-ins/
 
-## Other suggested Plugins ##
-Tabster: http://code.google.com/p/tabsterforcoda/downloads/list
-Allows tab, tab+shift for indenting
+## Other Suggested Plugins ##
+* PHP & Webtool Kit: http://www.chipwreck.de/blog/software/coda-php/
+* White Out: http://erikhinterbichler.com/apps/white-out/
+
+# Rules
+
+## Hidden File ##
+* Hide
+** Name:begins with:.
+** Name:is not:.htaccess
